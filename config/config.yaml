@@ -159,10 +159,10 @@ competitors:
     enabled: true
     sec_uid: ''
     url: https://www.tiktok.com/@hitpaw
-  - username: hitpaw
+  - username: hitpawofficial
     type: instagram
     enabled: true
-    url: https://www.instagram.com/hitpaw/
+    url: https://www.instagram.com/hitpawofficial/
   - username: HitPawOfficial
     type: twitter
     enabled: true

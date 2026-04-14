@@ -93,7 +93,7 @@ def build_video_analysis_prompt(post: Dict[str, Any]) -> str:
     duration = post.get("duration", "")
     duration_seconds = post.get("duration_seconds", 0)
     
-    prompt = f"""你是一位 AI 产品竞品分析专家。请观看这个 YouTube {video_type}，从竞品监控角度进行分析。
+    prompt = f"""你是一位 AI 产品竞品分析专家。请观看这个 YouTube {video_type}，从竞品监控角度进行简要分析。
 
 ## 视频基本信息
 - 标题：{title}
@@ -103,24 +103,16 @@ def build_video_analysis_prompt(post: Dict[str, Any]) -> str:
 - 描述：{description[:300] if description else "无"}
 
 ## 分析要求
-请从以下维度分析视频内容，返回 JSON 格式：
+请简要分析视频内容，只返回以下两个字段，JSON 格式：
 
 {{
-    "video_summary": "视频内容摘要（50字以内）",
-    "product_features": ["视频展示的产品功能/能力列表"],
-    "marketing_strategy": "营销策略分析（如：功能演示、用户案例、情感营销、技术展示等）",
-    "target_audience": "目标受众分析",
-    "visual_style": "视觉风格（如：科技感、生活化、教程风、娱乐化等）",
-    "key_message": "核心传达信息（30字以内）",
-    "competitive_insight": "竞品洞察：这个视频反映了该产品的什么竞争策略或新动向",
-    "content_quality": "内容质量评分（1-5）",
-    "virality_potential": "传播潜力评分（1-5）及理由"
+    "video_summary": "一句话摘要：视频展示了什么内容（30字以内）",
+    "competitive_insight": "一句话分析：这个视频反映了该产品的什么竞争策略或新动向（30字以内）"
 }}
 
 注意：
-1. 重点分析视频中展示的 AI 产品功能和营销策略
-2. 如果是 Shorts，注意其短视频特有的传播策略
-3. 如果视频无法播放或内容不清晰，请在 video_summary 中说明，其他字段填 null
+1. 每个字段严格控制在30字以内，不要啰嗦
+2. 如果视频无法播放或内容不清晰，请在 video_summary 中说明
 """
     return prompt
 

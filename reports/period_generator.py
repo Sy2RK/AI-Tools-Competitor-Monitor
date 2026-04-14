@@ -217,7 +217,7 @@ def build_company_period_feishu_card(
     Args:
         company: 产品名称
         period: 时间段信息 {"start_date": "...", "end_date": "...", "days": 7}
-        company_analysis: 该产品该时间段的 AI 分析结果（summary, new_features, new_features_post_urls, product_updates, product_updates_post_urls, routine_note, direct_action_suggestions）
+        company_analysis: 该产品该时间段的 AI 分析结果（summary, top_post_urls, video_highlights）
         monitored_platforms: 监控的平台列表（从数据库获取）
     
     Returns:
@@ -297,56 +297,22 @@ def build_company_period_feishu_card(
         })
     else:
         summary = company_analysis.get("summary") or ""
-        weekly_score = company_analysis.get("weekly_score")
-        weekly_title = company_analysis.get("weekly_title") or ""
-        new_features = company_analysis.get("new_features") or company_analysis.get("new_gameplay") or "无"
-        new_features_urls = company_analysis.get("new_features_post_urls") or company_analysis.get("new_gameplay_post_urls") or []
-        product_updates = company_analysis.get("product_updates") or company_analysis.get("offline_events") or "无"
-        product_updates_urls = company_analysis.get("product_updates_post_urls") or company_analysis.get("offline_event_post_urls") or []
-        routine_note = company_analysis.get("routine_note") or ""
-        actions_raw = company_analysis.get("direct_action_suggestions") or ""
+        top_post_urls = company_analysis.get("top_post_urls") or []
         posts_count = company_analysis.get("posts_count", 0)
         period_days = company_analysis.get("period_days", days)
         video_highlights = company_analysis.get("video_highlights") or []
         
         content_lines = []
         
-        if weekly_title:
-            content_lines.append(f"📌 **本周标题**: {weekly_title}")
-        if weekly_score is not None:
-            try:
-                s = float(weekly_score)
-                stars = "⭐" * min(int(round(s / 2)), 5) if s > 0 else ""
-                content_lines.append(f"📊 **周报评分**: {s:.0f}/10 {stars}")
-            except (TypeError, ValueError):
-                content_lines.append(f"📊 **周报评分**: {weekly_score}")
         if summary:
             content_lines.append(f"📝 **摘要**: {summary}")
-        
-        # 新功能/新能力：无则写无；有则说明 + 可点击链接
-        features_block = f"✨ **新功能/新能力**: {new_features}"
-        if new_features_urls:
-            features_block += "\n相关帖子链接:\n" + _format_post_urls_as_links(new_features_urls)
-        content_lines.append(features_block)
-        
-        # 产品动态：无则写无；有则说明 + 可点击链接
-        updates_block = f"📢 **产品动态**: {product_updates}"
-        if product_updates_urls:
-            updates_block += "\n相关帖子链接:\n" + _format_post_urls_as_links(product_updates_urls)
-        content_lines.append(updates_block)
-        
-        if routine_note:
-            content_lines.append(f"📌 **日常说明**: {routine_note}")
         
         if posts_count:
             content_lines.append(f"📊 **更新帖子数**: {posts_count} 条 (过去 {period_days} 天)")
         
-        if actions_raw:
-            actions = "\n".join([f"  - {item}" for item in (actions_raw if isinstance(actions_raw, list) else [actions_raw]) if item]) if isinstance(actions_raw, list) else str(actions_raw)
-            if not actions and isinstance(actions_raw, str):
-                actions = actions_raw
-            if actions:
-                content_lines.append(f"✅ **建议动作**:\n{actions}")
+        # 最相关链接（最多3条）
+        if top_post_urls:
+            content_lines.append("🔗 **相关链接**:\n" + _format_post_urls_as_links(top_post_urls))
         
         if content_lines:
             elements.append({
@@ -354,27 +320,20 @@ def build_company_period_feishu_card(
                 "text": {"tag": "lark_md", "content": "\n\n".join(content_lines)}
             })
         
-        # 视频AI分析亮点（独立区块）
+        # 视频AI分析亮点（独立区块，精简版）
         if video_highlights:
-            video_lines = [f"🎥 **视频AI分析** ({len(video_highlights)} 条视频):"]
+            video_lines = [f"🎥 **视频分析** ({len(video_highlights)} 条):"]
             for vh in video_highlights[:5]:  # 最多展示5条
                 post_url = vh.get("post_url", "")
-                summary = vh.get("video_summary", "")
-                key_msg = vh.get("key_message", "")
-                insight = vh.get("competitive_insight", "")
-                features = vh.get("product_features", [])
+                va_summary = vh.get("video_summary", "")
+                va_insight = vh.get("competitive_insight", "")
                 
                 link = f"[视频]({post_url})" if post_url else "视频"
                 parts = [f"  **{link}**"]
-                if summary:
-                    parts.append(f"  摘要: {summary}")
-                if key_msg:
-                    parts.append(f"  核心信息: {key_msg}")
-                if features:
-                    feat_str = ", ".join(features) if isinstance(features, list) else str(features)
-                    parts.append(f"  产品功能: {feat_str}")
-                if insight:
-                    parts.append(f"  竞品洞察: {insight}")
+                if va_summary:
+                    parts.append(f"  摘要: {va_summary}")
+                if va_insight:
+                    parts.append(f"  分析: {va_insight}")
                 video_lines.append("\n".join(parts))
             
             elements.append({"tag": "hr"})
@@ -383,10 +342,14 @@ def build_company_period_feishu_card(
                 "text": {"tag": "lark_md", "content": "\n\n".join(video_lines)}
             })
     
-    # 卡片标题：若有周报标题则带上，便于一眼看出本周重点
+    # 卡片标题
     header_title = f"🏁 竞品监控 · {company}"
-    if company_analysis and company_analysis.get("weekly_title"):
-        header_title += f" · {company_analysis.get('weekly_title', '')}"
+    if company_analysis and company_analysis.get("summary"):
+        # 从摘要中提取前30字作为副标题
+        short_summary = company_analysis.get("summary", "")[:30]
+        if len(company_analysis.get("summary", "")) > 30:
+            short_summary += "…"
+        header_title += f" · {short_summary}"
     else:
         header_title += " (时间段报告)"
     card = {

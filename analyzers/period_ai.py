@@ -59,7 +59,7 @@ def build_period_analysis_prompt(
     重点：新功能/新能力、产品动态；无则写无；记录对应帖子 URL；日常维护一笔带过；保留建议动作。
     """
     if not all_posts:
-        return f"""你是一个资深的 AI 产品经理与增长专家，专门帮团队做「AI 竞品社媒监控」。
+        return f"""你是一个资深的 AI 产品经理，专门帮团队做「AI 竞品社媒监控」。
 
 现在给你的是 AI 竞品【{company}】在社交媒体上过去 {period_days} 天内的监控结果：
 
@@ -73,15 +73,8 @@ def build_period_analysis_prompt(
 
 {{
   "company": "{company}",
-  "weekly_score": 0,
-  "weekly_title": "该周无社媒更新",
-  "summary": "该产品在过去 {period_days} 天内无社媒更新，建议手动查看各平台了解情况。",
-  "new_features": "无",
-  "new_features_post_urls": [],
-  "product_updates": "无",
-  "product_updates_post_urls": [],
-  "routine_note": "",
-  "direct_action_suggestions": "建议手动查看各平台账号了解状态和可能的原因。"
+  "summary": "该产品在过去 {period_days} 天内无社媒更新。",
+  "top_post_urls": []
 }}"""
     
     # 构建帖子列表（每条带链接，便于模型标注哪些是新功能/产品动态）
@@ -100,30 +93,23 @@ def build_period_analysis_prompt(
         # 如果有视频AI分析结果，附加到帖子内容中
         if video_analysis and isinstance(video_analysis, dict):
             va_summary = video_analysis.get("video_summary", "")
-            va_features = video_analysis.get("product_features", [])
             va_insight = video_analysis.get("competitive_insight", "")
-            va_key_msg = video_analysis.get("key_message", "")
             va_parts = []
             if va_summary:
-                va_parts.append(f"视频摘要: {va_summary}")
-            if va_features:
-                feat_str = ", ".join(va_features) if isinstance(va_features, list) else str(va_features)
-                va_parts.append(f"产品功能: {feat_str}")
-            if va_key_msg:
-                va_parts.append(f"核心信息: {va_key_msg}")
+                va_parts.append(f"摘要: {va_summary}")
             if va_insight:
-                va_parts.append(f"竞品洞察: {va_insight}")
+                va_parts.append(f"分析: {va_insight}")
             if va_parts:
-                block += "\n🎥视频AI分析: " + " | ".join(va_parts)
+                block += "\n🎥视频: " + " | ".join(va_parts)
         posts_block.append(block)
     
     posts_content = "\n\n".join(posts_block)
     total = len(all_posts)
     shown = min(total, 80)
 
-    return f"""你是一个资深的 AI 产品经理与增长专家，专门帮团队做「AI 竞品社媒监控」。
+    return f"""你是一个资深的 AI 产品经理，专门帮团队做「AI 竞品社媒监控」。
 
-现在给你的是 AI 竞品【{company}】在该时间段内、**所有平台**上的社媒更新帖子（已合并在一起），请整体分析并做一个 summary。
+现在给你的是 AI 竞品【{company}】在该时间段内、**所有平台**上的社媒更新帖子（已合并在一起），请整体分析。
 
 ---
 【竞品产品】{company}
@@ -134,31 +120,15 @@ def build_period_analysis_prompt(
 ---
 
 分析要求：
-1. **摘要**：用一段话总结该产品在这段时间内社媒上的整体动态（summary）。
-2. **新功能/新能力**：是否出现新的 AI 功能、模型能力、技术突破、应用场景等。
-   - 如果没有提到任何新功能相关内容，必须只写「无」，不要写其他解释。
-   - 如果有，请简要说明，并在 new_features_post_urls 中列出**对应帖子的完整 URL**（上面每条帖子都有「链接:」）。
-3. **产品动态**：是否出现产品更新、版本发布、定价变化、合作公告、市场活动等。
-   - 如果没有提到任何产品动态，必须只写「无」，不要写其他解释。
-   - 如果有，请简要说明，并在 product_updates_post_urls 中列出**对应帖子的完整 URL**。
-4. **日常维护**：如果该周更新大多为日常维护内容（普通宣传、节日问候、常规更新等），则只简单一笔带过，写在 routine_note 里；否则可留空。
-5. **建议动作**：给团队的可执行建议（保留此模块），列表 3–6 条。
-6. **周报评分**：根据「是否有新功能、是否有产品动态」打 1–10 分。有新功能或产品动态打高分（7–10），只有其一 5–7；都没有或多为日常维护打 1–3 分。**只要有帖子更新就不能打 0 分**，0 分仅用于零更新。
-7. **周报标题**：根据本周真实动向写**一句具体标题**（例如「新AI功能上线 + 定价调整」「日常运营为主，无重大动作」「多平台常规内容更新」）。**禁止使用「本周社媒动态」等笼统表述**，必须写出本周的具体情况。
+1. **摘要**：用一段话总结该产品在这段时间内社媒上的整体动态（summary），重点突出新功能、产品动态、营销策略等关键信息。
+2. **最相关链接**：从以上帖子中选出最相关的 3 条帖子 URL（优先选择有新功能发布、产品更新、重要营销活动的帖子），填入 top_post_urls。
 
 请严格按以下 JSON 结构输出（不要出现多余字段或自然语言）：
 
 {{
   "company": "{company}",
-  "weekly_score": 1-10 的整数（有更新则至少 1 分；有新功能/产品动态则 5-10）,
-  "weekly_title": "一句具体标题，概括本周真实动向（禁止写「本周社媒动态」）",
-  "summary": "一段话总结该产品该时间段内社媒整体动态。",
-  "new_features": "无 或 简要描述新AI功能/新能力/新应用场景（若无则必须写「无」）",
-  "new_features_post_urls": ["对应帖子的完整URL列表，若无则为空数组"],
-  "product_updates": "无 或 简要描述产品动态/版本更新/合作公告（若无则必须写「无」）",
-  "product_updates_post_urls": ["对应帖子的完整URL列表，若无则为空数组"],
-  "routine_note": "若多为日常维护则简单一笔带过，否则可留空",
-  "direct_action_suggestions": "建议动作，多条可用列表或换行"
+  "summary": "一段话总结该产品该时间段内社媒整体动态，重点突出新功能、产品动态等关键信息。",
+  "top_post_urls": ["最相关的3条帖子完整URL，不足3条则按实际数量"]
 }}"""
 
 
@@ -176,7 +146,7 @@ def analyze_company_period_data(
         period_days: 时间段天数
     
     Returns:
-        AI 分析结果（含 summary, new_features, new_features_post_urls, product_updates, product_updates_post_urls, routine_note, direct_action_suggestions），失败返回 None
+        AI 分析结果（含 summary, top_post_urls, video_highlights），失败返回 None
     """
     all_posts = _collect_company_posts(platforms_data_list)
     prompt = build_period_analysis_prompt(company=company, all_posts=all_posts, period_days=period_days)
@@ -193,25 +163,6 @@ def analyze_company_period_data(
             return [str(u).strip() for u in v if u]
         return []
 
-    try:
-        weekly_score = float(data.get("weekly_score", 0))
-        weekly_score = max(0, min(10, weekly_score))
-    except (TypeError, ValueError):
-        weekly_score = 0.0
-
-    raw_title = (data.get("weekly_title") or "").strip()
-    generic_titles = ("本周社媒动态", "本周动态", "社媒动态")
-    if not raw_title or raw_title in generic_titles:
-        raw_title = ""
-    # 有帖子但模型未给出有效评分/标题时做修正，避免出现「5 条帖子却 0 分 + 默认标题」
-    if total_posts > 0 and weekly_score == 0:
-        weekly_score = 1.0
-    if total_posts > 0 and not raw_title and (data.get("summary") or "").strip():
-        raw_title = (data.get("summary") or "").strip()[:48]
-        if len((data.get("summary") or "").strip()) > 48:
-            raw_title += "…"
-    weekly_title = raw_title or ("本周社媒动态" if total_posts == 0 else "本周有更新，详见摘要")
-
     # 收集视频分析亮点（从有 video_analysis 的帖子中提取）
     video_highlights = []
     for post in all_posts:
@@ -221,27 +172,16 @@ def analyze_company_period_data(
             highlight = {
                 "post_url": post_url,
                 "video_summary": va.get("video_summary", ""),
-                "product_features": va.get("product_features", []),
-                "key_message": va.get("key_message", ""),
                 "competitive_insight": va.get("competitive_insight", ""),
-                "content_quality": va.get("content_quality"),
-                "virality_potential": va.get("virality_potential"),
             }
             # 只保留有实质内容的
-            if highlight["video_summary"] or highlight["key_message"] or highlight["competitive_insight"]:
+            if highlight["video_summary"] or highlight["competitive_insight"]:
                 video_highlights.append(highlight)
 
     return {
         "company": data.get("company") or company,
-        "weekly_score": weekly_score,
-        "weekly_title": weekly_title,
         "summary": data.get("summary") or "",
-        "new_features": data.get("new_features") or data.get("new_gameplay") or "无",
-        "new_features_post_urls": _norm_urls(data.get("new_features_post_urls") or data.get("new_gameplay_post_urls")),
-        "product_updates": data.get("product_updates") or data.get("offline_events") or "无",
-        "product_updates_post_urls": _norm_urls(data.get("product_updates_post_urls") or data.get("offline_event_post_urls")),
-        "routine_note": data.get("routine_note") or "",
-        "direct_action_suggestions": data.get("direct_action_suggestions") or "",
+        "top_post_urls": _norm_urls(data.get("top_post_urls"))[:3],
         "posts_count": total_posts,
         "period_days": period_days,
         "video_highlights": video_highlights,
