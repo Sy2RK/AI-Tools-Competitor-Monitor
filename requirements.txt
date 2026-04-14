@@ -1,0 +1,24 @@
+# 每日爬虫（scrapers/daily_scraper）与每周周报工作流（workflows/period_workflow）共用
+
+# HTTP 请求（RapidAPI、飞书/企微 webhook、Jina Reader 等）
+requests>=2.32.5,<3.0.0
+
+# YAML（rapidapi 配置、飞书卡片等）
+PyYAML>=6.0.3,<7.0.0
+
+# 环境变量（env_loader、period_workflow）
+python-dotenv>=1.0.0
+
+# 周报 AI 分析（analyzers/period_ai、daily_ai，兼容 OpenRouter）
+openai>=1.0.0
+
+# RSS/Atom 解析（官网爬虫 RSS 探测，轻量级）
+feedparser>=6.0.0
+
+# HTML 解析（官网爬虫 Requests 降级方案）
+beautifulsoup4>=4.12.0
+
+# YouTube 视频流 URL 提取（供多模态模型分析）
+yt-dlp>=2024.0.0
+pysocks>=1.7.1
+imageio-ffmpeg>=0.4.0

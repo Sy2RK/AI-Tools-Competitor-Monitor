@@ -1,0 +1,221 @@
+notification:
+  webhooks:
+    feishu_url: ''
+    wework_url: ''
+    wework_msg_type: markdown
+
+competitors:
+- name: PixVerse
+  priority: high
+  platforms:
+  - username: pixverse
+    type: tiktok
+    enabled: true
+    sec_uid: ''
+    url: https://www.tiktok.com/@pixverse
+  - username: pixverse_official
+    type: instagram
+    enabled: true
+    url: https://www.instagram.com/pixverse_official/
+  - username: pixverse_
+    type: twitter
+    enabled: true
+    user_id: ''
+    url: https://x.com/pixverse_
+  - username: PixVerse_Official
+    type: youtube
+    enabled: true
+    channel_id: ''
+    url: https://www.youtube.com/@PixVerse_Official
+  - url: https://pixverse.ai
+    type: website
+    enabled: true
+
+- name: AI Mirror
+  priority: high
+  platforms:
+  - username: aimirror.official
+    type: tiktok
+    enabled: true
+    sec_uid: ''
+    url: https://www.tiktok.com/@aimirror.official
+  - username: aimirror.official
+    type: instagram
+    enabled: true
+    url: https://www.instagram.com/aimirror.official/
+  - username: aimirror_app
+    type: twitter
+    enabled: true
+    user_id: ''
+    url: https://x.com/aimirror_app
+  - username: AIMirror
+    type: youtube
+    enabled: true
+    channel_id: ''
+    url: https://www.youtube.com/@AIMirror
+  - url: https://aimirror.fun
+    type: website
+    enabled: true
+
+- name: Glam AI
+  priority: high
+  platforms:
+  - username: glam_app
+    type: tiktok
+    enabled: true
+    sec_uid: ''
+    url: https://www.tiktok.com/@glam_app
+  - username: glam_app
+    type: instagram
+    enabled: true
+    url: https://www.instagram.com/glam_app/
+  - username: glam_app
+    type: twitter
+    enabled: true
+    user_id: ''
+    url: https://x.com/glam_app
+  - url: https://glamlabs.app
+    type: website
+    enabled: true
+
+- name: DreamFace
+  priority: high
+  platforms:
+  - username: dreamfaceapp
+    type: tiktok
+    enabled: true
+    sec_uid: ''
+    url: https://www.tiktok.com/@dreamfaceapp
+  - username: dreamface.official
+    type: instagram
+    enabled: true
+    url: https://www.instagram.com/dreamface.official/
+  - username: DreamFaceApp
+    type: twitter
+    enabled: true
+    user_id: ''
+    url: https://x.com/DreamFaceApp
+  - url: https://dreamfaceapp.com
+    type: website
+    enabled: true
+
+- name: Creati
+  priority: medium
+  platforms:
+  - username: imgcreator.ai
+    type: tiktok
+    enabled: true
+    sec_uid: ''
+    url: https://www.tiktok.com/@imgcreator.ai
+  - username: ZMOAI
+    type: twitter
+    enabled: true
+    user_id: ''
+    url: https://x.com/ZMOAI
+
+- name: SelfyzAI
+  priority: medium
+  platforms:
+  - username: selfyzai
+    type: tiktok
+    enabled: true
+    sec_uid: ''
+    url: https://www.tiktok.com/@selfyzai
+  - username: selfyzai
+    type: instagram
+    enabled: true
+    url: https://www.instagram.com/selfyzai/
+  - username: SelfyzAI
+    type: twitter
+    enabled: true
+    user_id: ''
+    url: https://x.com/SelfyzAI
+
+- name: Momo
+  priority: medium
+  platforms:
+  - username: momoai.app
+    type: tiktok
+    enabled: true
+    sec_uid: ''
+    url: https://www.tiktok.com/@momoai.app
+  - username: momoai.app
+    type: instagram
+    enabled: true
+    url: https://www.instagram.com/momoai.app/
+  - url: https://momoai.co
+    type: website
+    enabled: true
+
+- name: Videa
+  priority: low
+  platforms: []
+
+- name: AI Marvels
+  priority: high
+  platforms:
+  - username: hitpaw
+    type: tiktok
+    enabled: true
+    sec_uid: ''
+    url: https://www.tiktok.com/@hitpaw
+  - username: hitpaw
+    type: instagram
+    enabled: true
+    url: https://www.instagram.com/hitpaw/
+  - username: HitPawOfficial
+    type: twitter
+    enabled: true
+    user_id: ''
+    url: https://x.com/HitPawOfficial
+  - username: HitPaw
+    type: youtube
+    enabled: true
+    channel_id: ''
+    url: https://www.youtube.com/@HitPaw
+  - url: https://hitpaw.com
+    type: website
+    enabled: true
+
+- name: Revive
+  priority: medium
+  platforms:
+  - username: revive.app
+    type: instagram
+    enabled: true
+    url: https://www.instagram.com/revive.app/
+  - url: https://reviveapp.net
+    type: website
+    enabled: true
+
+- name: FacePlay
+  priority: medium
+  platforms:
+  - username: faceplay_app
+    type: tiktok
+    enabled: true
+    sec_uid: ''
+    url: https://www.tiktok.com/@faceplay_app
+  - username: faceplay_official
+    type: instagram
+    enabled: true
+    url: https://www.instagram.com/faceplay_official/
+  - url: https://faceplay.cc
+    type: website
+    enabled: true
+
+- name: Hula AI
+  priority: medium
+  platforms:
+  - username: hula_ai
+    type: tiktok
+    enabled: true
+    sec_uid: ''
+    url: https://www.tiktok.com/@hula_ai
+  - username: hula_ai
+    type: instagram
+    enabled: true
+    url: https://www.instagram.com/hula_ai/
+  - url: https://hulaapp.ai
+    type: website
+    enabled: true

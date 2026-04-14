@@ -1,0 +1,15 @@
+[project]
+name = "competitor-monitor"
+version = "0.1.0"
+description = "竞品社媒每日爬取与周报工作流"
+requires-python = ">=3.10"
+dependencies = [
+    "requests>=2.32.5,<3.0.0",
+    "PyYAML>=6.0.3,<7.0.0",
+    "python-dotenv>=1.0.0",
+    "openai>=1.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

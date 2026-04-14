@@ -1,0 +1,68 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# Environment variables (敏感信息)
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 周报工作流中间产物
+workflows/output/*.json
+!workflows/output/.gitkeep
+
+# Output files (可能包含临时数据)
+output/*.json
+output/*.csv
+output/*.db
+output/*.txt
+output/*.html
+# 但保留 output 目录结构
+!output/.gitkeep
+# 排除所有 output 子目录中的文件
+output/**/*.db
+output/**/*.json
+output/**/*.csv
+
+# Docker
+docker/.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+
+# 本地数据库（勿提交）
+db/*.db
+db/*.db.bak.*
+
+# 视频缓存（勿提交，文件较大）
+cache/videos/*.mp4
+
+# 原始数据文件（勿提交）
+*.csv
