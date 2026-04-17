@@ -214,9 +214,9 @@ brew install ffmpeg
 
 ---
 
-## 当前监控的 AI 产品（12 个）
+## 当前监控的 AI 产品（11 个）
 
-PixVerse、AI Mirror、Glam AI、DreamFace、Creati、SelfyzAI、Momo、Videa、AI Marvels (HitPaw)、Revive、FacePlay、Hula AI
+PixVerse、AI Mirror、Glam AI、DreamFace、Creati、SelfyzAI、Momo、AI Marvels (HitPaw)、Revive、FacePlay、Hula AI
 
 ---
 

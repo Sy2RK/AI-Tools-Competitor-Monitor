@@ -48,11 +48,11 @@ competitors:
     enabled: true
     user_id: ''
     url: https://x.com/aimirror_app
-  - username: AIMirror
+  - username: AIMirror_Official
     type: youtube
     enabled: true
     channel_id: ''
-    url: https://www.youtube.com/@AIMirror
+    url: https://www.youtube.com/@AIMirror_Official
   - url: https://aimirror.fun
     type: website
     enabled: true
@@ -69,16 +69,11 @@ competitors:
     type: instagram
     enabled: true
     url: https://www.instagram.com/glam_app/
-  - username: glam_app
+  - username: GlamAI_app
     type: twitter
     enabled: true
     user_id: ''
-    url: https://x.com/glam_app
-  - username: glamai
-    type: youtube
-    enabled: true
-    channel_id: UCTc2RdDVdpy3dydBDnwJs3g
-    url: https://www.youtube.com/@glamai
+    url: https://x.com/GlamAI_app
   - url: https://glamlabs.app
     type: website
     enabled: true
@@ -95,16 +90,11 @@ competitors:
     type: instagram
     enabled: true
     url: https://www.instagram.com/dreamface.official/
-  - username: DreamFaceApp
+  - username: dreamface_ai
     type: twitter
     enabled: true
     user_id: ''
-    url: https://x.com/DreamFaceApp
-  - username: dreamfaceai
-    type: youtube
-    enabled: true
-    channel_id: UCPftVx1HkyImdSC7SqB0HLA
-    url: https://www.youtube.com/@dreamfaceai
+    url: https://x.com/dreamface_ai
   - url: https://dreamfaceapp.com
     type: website
     enabled: true
@@ -117,42 +107,29 @@ competitors:
     enabled: true
     sec_uid: ''
     url: https://www.tiktok.com/@imgcreator.ai
-  - username: ZMOAI
-    type: twitter
-    enabled: true
-    user_id: ''
-    url: https://x.com/ZMOAI
-  - username: creati_ai
+  - username: zmoai
     type: youtube
     enabled: true
-    channel_id: UCKk-BdoRvkAF7GiGNIsQ7Vw
-    url: https://www.youtube.com/@creati_ai
-  - url: https://creati.ai
-    type: website
-    enabled: true
+    channel_id: ''
+    url: https://www.youtube.com/@zmoai
 
 - name: SelfyzAI
   priority: medium
   platforms:
   - username: selfyzai
-    type: tiktok
-    enabled: true
-    sec_uid: ''
-    url: https://www.tiktok.com/@selfyzai
-  - username: selfyzai
     type: instagram
     enabled: true
     url: https://www.instagram.com/selfyzai/
-  - username: SelfyzAI
+  - username: SelfieU_Ai
     type: twitter
     enabled: true
     user_id: ''
-    url: https://x.com/SelfyzAI
-  - username: selfyzai
+    url: https://x.com/SelfieU_Ai
+  - username: SelfyzAI
     type: youtube
     enabled: true
     channel_id: UCW45xYx4oHtXbUNT-YVOGJw
-    url: https://www.youtube.com/@selfyzai
+    url: https://www.youtube.com/@SelfyzAI
 
 - name: Momo
   priority: medium
@@ -162,46 +139,13 @@ competitors:
     enabled: true
     sec_uid: ''
     url: https://www.tiktok.com/@momoai.app
-  - username: momoai.app
+  - username: momoaiapp
     type: instagram
     enabled: true
-    url: https://www.instagram.com/momoai.app/
-  - username: momoaiapp
-    type: twitter
-    enabled: true
-    user_id: '1869279772095787008'
-    url: https://x.com/momoaiapp
-  - username: momoai
-    type: youtube
-    enabled: true
-    channel_id: UCpx4umiooWxJPixOXLb446Q
-    url: https://www.youtube.com/@momoai
+    url: https://www.instagram.com/momoaiapp/
   - url: https://momoai.co
     type: website
     enabled: true
-
-- name: Videa
-  priority: low
-  platforms:
-  - username: videa_ai
-    type: tiktok
-    enabled: true
-    sec_uid: ''
-    url: https://www.tiktok.com/@videa_ai
-  - username: videa.ai
-    type: instagram
-    enabled: true
-    url: https://www.instagram.com/videa.ai/
-  - username: videaapp
-    type: twitter
-    enabled: true
-    user_id: '4307443814'
-    url: https://x.com/videaapp
-  - username: VideaAI
-    type: youtube
-    enabled: true
-    channel_id: UCLSRo_mVIlsFT4q_tmBYHqw
-    url: https://www.youtube.com/@VideaAI
 
 - name: AI Marvels
   priority: high
@@ -232,25 +176,10 @@ competitors:
 - name: Revive
   priority: medium
   platforms:
-  - username: revive.app
-    type: tiktok
-    enabled: true
-    sec_uid: ''
-    url: https://www.tiktok.com/@revive.app
-  - username: revive.app
+  - username: app_revive
     type: instagram
     enabled: true
-    url: https://www.instagram.com/revive.app/
-  - username: reviveapp
-    type: twitter
-    enabled: true
-    user_id: '2480805146'
-    url: https://x.com/reviveapp
-  - username: reviveapp
-    type: youtube
-    enabled: true
-    channel_id: UCoW1FV0SmJlgtdyhMqDbrsg
-    url: https://www.youtube.com/@reviveapp
+    url: https://www.instagram.com/app_revive/
   - url: https://reviveapp.net
     type: website
     enabled: true
@@ -267,11 +196,6 @@ competitors:
     type: instagram
     enabled: true
     url: https://www.instagram.com/faceplay_official/
-  - username: faceplay_app
-    type: twitter
-    enabled: true
-    user_id: '1475635266597515265'
-    url: https://x.com/faceplay_app
   - url: https://faceplay.cc
     type: website
     enabled: true
@@ -284,20 +208,10 @@ competitors:
     enabled: true
     sec_uid: ''
     url: https://www.tiktok.com/@hula_ai
-  - username: hula_ai
+  - username: hulaapp.ai
     type: instagram
     enabled: true
-    url: https://www.instagram.com/hula_ai/
-  - username: hulaai
-    type: twitter
-    enabled: true
-    user_id: '1682722770801799168'
-    url: https://x.com/hulaai
-  - username: hulaai
-    type: youtube
-    enabled: true
-    channel_id: UCB2u5J1rkVcS49GjurT-iaA
-    url: https://www.youtube.com/@hulaai
+    url: https://www.instagram.com/hulaapp.ai/
   - url: https://hulaapp.ai
     type: website
     enabled: true
