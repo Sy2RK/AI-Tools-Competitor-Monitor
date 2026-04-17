@@ -1,10 +1,10 @@
 #!/bin/bash
 # Bash脚本：每周定时运行时间段工作流
 # 用于 macOS/Linux Cron 任务（建议 crontab：每周一 10:30）
-# 功能：生成指定时间段或上周的竞品周报
+# 功能：生成指定时间段或过去7天的竞品周报
 #
 # 用法：
-#   ./run-weekly-period-workflow.sh                    # 默认：上周一至上周日
+#   ./run-weekly-period-workflow.sh                    # 默认：过去7天（7天前至昨天）
 #   ./run-weekly-period-workflow.sh --start-date 2026-01-13 --end-date 2026-01-19
 
 # 切换到脚本所在目录（项目根）
@@ -43,22 +43,20 @@ fi
 LOG_DIR="logs"
 mkdir -p "$LOG_DIR"
 
-# 确定日期范围：若指定了起止日期则用指定的，否则计算上周
+# 确定日期范围：若指定了起止日期则用指定的，否则计算过去7天
 if [ -n "$CUSTOM_START" ] && [ -n "$CUSTOM_END" ]; then
     LAST_WEEK_START="$CUSTOM_START"
     LAST_WEEK_END="$CUSTOM_END"
 else
-    # 计算上周的日期范围（周一到周日）
+    # 计算过去7天：昨天往前推7天（共7天，如周一到周日）
     if [[ "$OSTYPE" == "darwin"* ]]; then
-        DAY_OF_WEEK=$(date +%w)
-        [ "$DAY_OF_WEEK" -eq 0 ] && DAY_OF_WEEK=7
-        LAST_WEEK_END=$(date -v-${DAY_OF_WEEK}d +%Y-%m-%d)
-        LAST_WEEK_START=$(date -v-$(($DAY_OF_WEEK + 6))d +%Y-%m-%d)
+        # macOS
+        LAST_WEEK_END=$(date -v-1d +%Y-%m-%d)
+        LAST_WEEK_START=$(date -v-7d +%Y-%m-%d)
     else
-        DAY_OF_WEEK=$(date +%w)
-        [ "$DAY_OF_WEEK" -eq 0 ] && DAY_OF_WEEK=7
-        LAST_WEEK_END=$(date -d "$DAY_OF_WEEK days ago" +%Y-%m-%d)
-        LAST_WEEK_START=$(date -d "$(($DAY_OF_WEEK + 6)) days ago" +%Y-%m-%d)
+        # Linux
+        LAST_WEEK_END=$(date -d "yesterday" +%Y-%m-%d)
+        LAST_WEEK_START=$(date -d "7 days ago" +%Y-%m-%d)
     fi
 fi
 
