@@ -78,9 +78,17 @@ class CompetitorPeriodDataExtractor:
         """
         print(f"📊 开始提取数据: {start_date} 至 {end_date}")
         
-        # 确定要提取的公司列表
+        # 确定要提取的公司列表：优先从 config.yaml 获取，确保只处理配置中的公司
         if companies is None:
-            companies = self.db.get_all_companies()
+            try:
+                from competitor_config import load_config_dict
+                config_dict = load_config_dict()
+                if config_dict and config_dict.get("competitors"):
+                    companies = [c["name"] for c in config_dict["competitors"] if c.get("name")]
+            except Exception:
+                pass
+            if not companies:
+                companies = self.db.get_all_companies()
         
         if not companies:
             print("⚠️ 未找到任何公司")

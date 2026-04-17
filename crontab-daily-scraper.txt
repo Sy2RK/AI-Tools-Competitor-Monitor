@@ -1,4 +1,0 @@
-# 每日 10:15 运行爬虫（爬取前一天数据）
-# 使用前请将 __PROJECT_DIR__ 替换为项目实际路径
-# 安装： (crontab -l 2>/dev/null; cat crontab-daily-scraper.txt | grep -v '^#' | sed 's|__PROJECT_DIR__|你的项目路径|g') | crontab -
-15 10 * * * __PROJECT_DIR__/run-daily-scraper.sh >> __PROJECT_DIR__/logs/cron.log 2>&1

@@ -204,7 +204,7 @@ def scrape_facebook_platform(
     game: Optional[str],
     platform: Dict[str, Any],
     db: CompetitorDatabaseDB,
-    days_ago: int = 0
+    days_ago: int = 1
 ) -> Optional[Dict[str, Any]]:
     """爬取Facebook平台数据"""
     from scrapers.facebook import _fetch_facebook_raw, parse_facebook_posts
@@ -714,9 +714,16 @@ def scrape_all_companies_to_database(
         load_companies_config_into_database(db=db, db_path=db_path)
         print()  # 空行分隔
     
-    # 获取公司列表
+    # 获取公司列表：优先从 config.yaml 获取，确保只处理配置中的公司
     if companies is None:
-        companies = db.get_all_companies()
+        if load_config:
+            # 从 config.yaml 获取公司列表（已通过 load_companies_config_into_database 同步到数据库）
+            from competitor_config import load_config_dict
+            config_dict = load_config_dict()
+            if config_dict and config_dict.get("competitors"):
+                companies = [c["name"] for c in config_dict["competitors"] if c.get("name")]
+        if not companies:
+            companies = db.get_all_companies()
     
     if not companies:
         print("⚠️ 数据库中未找到任何公司")

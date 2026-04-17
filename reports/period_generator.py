@@ -342,16 +342,8 @@ def build_company_period_feishu_card(
                 "text": {"tag": "lark_md", "content": "\n\n".join(video_lines)}
             })
     
-    # 卡片标题
+    # 卡片标题（飞书标题空间有限，只放公司名，时间段和摘要在正文中展示）
     header_title = f"🏁 竞品监控 · {company}"
-    if company_analysis and company_analysis.get("summary"):
-        # 从摘要中提取前30字作为副标题
-        short_summary = company_analysis.get("summary", "")[:30]
-        if len(company_analysis.get("summary", "")) > 30:
-            short_summary += "…"
-        header_title += f" · {short_summary}"
-    else:
-        header_title += " (时间段报告)"
     card = {
         "config": {"wide_screen_mode": True},
         "header": {
