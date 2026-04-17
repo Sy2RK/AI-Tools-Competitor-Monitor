@@ -90,7 +90,7 @@ python scrapers/daily_scraper.py --days-ago 1
 
 ```bash
 export PYTHONPATH="$(pwd):$PYTHONPATH"
-python workflows/period_workflow.py --start-date 2026-04-10 --end-date 2026-04-17
+python workflows/period_workflow.py --start-date 2026-04-10 --end-date 2026-04-16
 ```
 
 - `--skip-send`：只生成文件，不推送到飞书/企微
@@ -144,7 +144,7 @@ brew install ffmpeg
 | 任务 | 频率 | 说明 |
 |------|------|------|
 | 每日爬虫 | 每天 10:00 | 爬取前一天各平台数据 |
-| 每周周报 | 每周一 10:30 | 生成上周竞品周报并推送 |
+| 每周周报 | 每周一 10:30 | 生成过去7天竞品周报并推送 |
 | 数据库备份 | 每天 02:00 | SQLite 数据库备份，保留最近 10 份 |
 | 日志清理 | 每周日 03:00 | 清理 30 天前的日志、7 天前的视频缓存 |
 
