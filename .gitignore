@@ -60,6 +60,7 @@ Thumbs.db
 # 本地数据库（勿提交）
 db/*.db
 db/*.db.bak.*
+db/backups/
 
 # 视频缓存（勿提交，文件较大）
 cache/videos/*.mp4

@@ -106,27 +106,110 @@ python workflows/period_workflow.py --start-date 2026-04-10 --end-date 2026-04-1
 
 ---
 
+## 服务器部署
+
+### 1. 安装依赖
+
+```bash
+# Python 环境
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+# 系统依赖（视频压缩需要 ffmpeg）
+# Ubuntu/Debian:
+sudo apt install ffmpeg
+# macOS:
+brew install ffmpeg
+# ffmpeg 也可通过 imageio-ffmpeg 自动获取（无需系统安装）
+```
+
+### 2. 配置 `.env`
+
+复制 `.env` 模板并填写密钥（详见上方"密钥和推送地址"表格）。
+
+**⚠️ 服务器特别注意**：
+- `VIDEO_DOWNLOAD_PROXY`：本地开发用的 `socks5://127.0.0.1:7890` 需改为服务器可用代理，海外服务器可留空
+- `FEISHU_WEBHOOK_URL`：建议使用服务器专用的飞书群 Webhook
+
+### 3. 安装定时任务
+
+```bash
+# 一键安装所有定时任务（推荐）
+./setup-cron.sh
+```
+
+安装的定时任务：
+
+| 任务 | 频率 | 说明 |
+|------|------|------|
+| 每日爬虫 | 每天 10:00 | 爬取前一天各平台数据 |
+| 每周周报 | 每周一 10:30 | 生成上周竞品周报并推送 |
+| 数据库备份 | 每天 02:00 | SQLite 数据库备份，保留最近 10 份 |
+| 日志清理 | 每周日 03:00 | 清理 30 天前的日志、7 天前的视频缓存 |
+
+也可单独安装：
+
+```bash
+./setup-daily-cron.sh       # 仅安装每日爬虫
+./setup-weekly-cron.sh      # 仅安装每周周报
+```
+
+### 4. 运维脚本
+
+```bash
+# 手动备份数据库（默认保留 10 份）
+./scripts/backup-db.sh
+./scripts/backup-db.sh 20    # 保留 20 份
+
+# 手动清理日志和缓存
+./scripts/cleanup-logs.sh           # 默认：日志保留 30 天，视频缓存保留 7 天
+./scripts/cleanup-logs.sh 60 14     # 日志保留 60 天，视频缓存保留 14 天
+```
+
+### 5. 目录说明
+
+| 目录 | 用途 | 是否自动创建 |
+|------|------|-------------|
+| `db/` | SQLite 数据库 | 首次运行自动创建 |
+| `db/backups/` | 数据库备份 | 备份脚本自动创建 |
+| `logs/` | 运行日志 | shell 脚本自动创建 |
+| `cache/videos/` | 视频缓存 | 首次下载自动创建 |
+
+---
+
 ## 项目结构
 
 ```
-├── config/config.yaml      # 竞品名单 + 各平台账号配置
-├── .env                    # API 密钥和推送地址（勿提交）
-├── db/competitor_data.db   # 本地数据库（抓取数据 + 周报缓存）
-├── scrapers/               # 爬虫模块
-│   ├── daily_scraper.py    # 每日抓取入口
-│   ├── rapidapi.py         # TikTok/Instagram/Twitter RapidAPI 爬虫
-│   ├── youtube_official.py # YouTube 官方 API 爬虫
-│   └── website_scraper.py  # 官网混合爬虫（RSS + Jina + Requests）
-├── analyzers/              # AI 分析模块
-│   ├── period_ai.py        # 周报 AI 分析（摘要 + 相关链接）
-│   └── video_ai.py         # 视频 AI 分析（DashScope qwen3.6-plus）
-├── reports/                # 报告生成模块
-│   ├── period_extractor.py # 数据提取器
-│   └── period_generator.py # 飞书/企微卡片生成 + 推送
-├── workflows/              # 工作流
-│   └── period_workflow.py  # 周报完整流程（提取→分析→报告→推送）
-└── database/               # 数据库模块
-    └── competitor_db.py    # SQLite 数据库操作
+├── config/config.yaml          # 竞品名单 + 各平台账号配置
+├── .env                        # API 密钥和推送地址（勿提交）
+├── db/competitor_data.db       # 本地数据库（抓取数据 + 周报缓存）
+├── db/backups/                 # 数据库备份目录
+├── logs/                       # 运行日志
+├── cache/videos/               # 视频缓存
+├── scrapers/                   # 爬虫模块
+│   ├── daily_scraper.py        # 每日抓取入口
+│   ├── rapidapi.py             # TikTok/Instagram/Twitter RapidAPI 爬虫
+│   ├── youtube_official.py     # YouTube 官方 API 爬虫
+│   └── website_scraper.py      # 官网混合爬虫（RSS + Jina + Requests）
+├── analyzers/                  # AI 分析模块
+│   ├── period_ai.py            # 周报 AI 分析（摘要 + 相关链接）
+│   └── video_ai.py             # 视频 AI 分析（DashScope qwen3.6-plus）
+├── reports/                    # 报告生成模块
+│   ├── period_extractor.py     # 数据提取器
+│   └── period_generator.py     # 飞书/企微卡片生成 + 推送
+├── workflows/                  # 工作流
+│   └── period_workflow.py      # 周报完整流程（提取→分析→报告→推送）
+├── database/                   # 数据库模块
+│   └── competitor_db.py        # SQLite 数据库操作
+├── scripts/                    # 运维脚本
+│   ├── backup-db.sh            # 数据库备份
+│   └── cleanup-logs.sh         # 日志和缓存清理
+├── setup-cron.sh               # 一键安装所有定时任务
+├── setup-daily-cron.sh         # 安装每日爬虫定时任务
+├── setup-weekly-cron.sh        # 安装每周周报定时任务
+├── run-daily-scraper.sh        # 每日爬虫执行脚本
+└── run-weekly-period-workflow.sh # 每周周报执行脚本
 ```
 
 ---
